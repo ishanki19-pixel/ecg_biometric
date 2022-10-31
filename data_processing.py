@@ -1,8 +1,3 @@
-"""
-Author: Aishni Parab
-File: data_processing.py
-Description: converts .dat files to .csv and generates an aggregated dataset.
-"""
 from sklearn.model_selection import train_test_split
 from itertools import combinations, islice
 import matplotlib.pyplot as plt
@@ -366,10 +361,10 @@ class getData():
     p, a, g = inst.dissect_labels(info)
     self.people_labels, self.age_labels, self.gender_labels = inst.labels_to_ints(p, a, g)
     X, Y = self.gender_id(feats, personid)
+    self.split_dataset(feats, personid)
     return X, Y, p
     #comment out line 368-369 for person identification
     #uncomment the line below
-    #self.split_dataset(feats, personid)
   
   def gender_id(self, feat, personid):
     for i, person in enumerate(personid):
@@ -384,7 +379,7 @@ class getData():
 
 class plotHelper():
   # prints and plots the confusion matrix
-  def plot_confusion_matrix(cm, classes, title='Confusion matrix', cmap=plt.cm.Blues):
+  def plot_confusion_matrix(self, cm, classes, title='Confusion matrix', cmap=plt.cm.Blues):
       print(cm)
       plt.imshow(cm, interpolation='nearest', cmap=cmap)
       plt.title(title)
@@ -406,10 +401,9 @@ class plotHelper():
       plt.show()
       
   # summarise history for accuracy and loss graphically
-  def plot_keys(history):
-      print(history.history.keys())
-      plt.plot(history.history['acc'])
-      plt.plot(history.history['val_acc'])
+  def plot_keys(self, history):
+      plt.plot(history.history['accuracy'])
+      plt.plot(history.history['val_accuracy'])
       plt.title('model accuracy')
       plt.ylabel('accuracy')
       plt.xlabel('epoch')

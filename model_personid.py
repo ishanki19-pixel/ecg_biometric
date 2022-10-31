@@ -1,8 +1,3 @@
-""" 
-Author: Aishni Parab
-File: model_personid.py
-Description: calls functions in data_processing to init data. runs trianing and testing on data.
-"""
 from keras.layers import Dense, Dropout, Activation, Flatten, Convolution2D, MaxPooling2D
 from sklearn.metrics import classification_report,confusion_matrix
 from keras.callbacks import EarlyStopping, TensorBoard
@@ -19,7 +14,8 @@ np.random.seed(123) # for reproducibility
     
 # load data
 dataset = data.getData() #instance 
-dataset.get()
+X, Y, p = dataset.get()
+
 (X_train, y_train), (X_test, y_test) = (dataset.X_train, dataset.y_train), (dataset.X_test, dataset.y_test)
 
 # preprocess data
@@ -51,16 +47,12 @@ model.add(Dense(128, activation='tanh'))
 model.add(Dense(90, activation='softmax'))
 
 # compile model
-model.compile(loss='categorical_crossentropy',
-              optimizer='rmsprop',
-              metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
 # fit model on training data
 tensorboard = TensorBoard(log_dir="logs_personid/{}".format(time()))
 earlystopping = EarlyStopping(monitor='val_loss', patience=10)
-history = model.fit(X_train, y_train, 
-          batch_size=10, validation_data=(X_test, y_test), nb_epoch=10, verbose=1,
-          callbacks = [earlystopping, tensorboard])
+history = model.fit(X_train, y_train, batch_size=10, validation_data=(X_test, y_test), epochs=10, verbose=1, callbacks = [earlystopping, tensorboard])
 
 # evaluate model on test data
 print("Evaluating model")
@@ -76,17 +68,23 @@ plot_fn = data.plotHelper()
 plot_fn.plot_keys(history)
 
 # confusion matrix
-y_pred = model.predict_classes(X_test)
-print(y_pred)
+y_pred = model.predict(X_test)
+classes_x=np.argmax(y_pred,axis=1)
 
-p=model.predict_proba(X_test) # to predict probability
+
+# p=model.predict_proba(X_test) # to predict probability
 
 inst = data.Setup()
 feats, personid, info = inst.get_data()
 names, age, gender = inst.dissect_labels(info)
 target_names = np.asarray(names)
-print(classification_report(np.argmax(y_test,axis=1), y_pred,target_names=target_names))
-print(confusion_matrix(np.argmax(y_test,axis=1), y_pred))
+# print(target_names)
+
+# Y = np.argmax(y_test,axis=1)
+# print(Y)
+# print(classification_report(np.argmax(y_test,axis=1), y_pred,target_names=target_names))
+# cm = confusion_matrix(Y, y_pred)
+# plot_fn.plot_confusion_matrix(cm, classes=['m', 'f'], title='Confusion matrix')
 
 # load model from dir
-# model = model.load_weights(os.path.join('saved_pid_w_m', 'rsampled_.h5'))
+model = model.load_weights(os.path.join('saved_models', 'rsampled_.h5'))

@@ -1,10 +1,5 @@
-""" 
-Author: Aishni Parab
-File: model_genderid.py
-Description: calls functions in data_processing to init data. runs training and testing on data.
-"""
 from sklearn.model_selection import cross_val_score, cross_val_predict, StratifiedKFold
-from sklearn.metrics import accuracy_score, classification_report,confusion_matrix
+from sklearn.metrics import accuracy_score,confusion_matrix
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.models import Sequential, load_model
 from sklearn.preprocessing import StandardScaler
@@ -79,6 +74,6 @@ np.set_printoptions(precision=2)
 # Plot non-normalized confusion matrix
 plot_fn = data.plotHelper()
 plt.figure()
-plot_fn.plot_confusion_matrix(cnf_matrix, classes=['m', 'f'], title='Confusion matrix')
+plot_fn.plot_confusion_matrix(cnf_matrix, classes=['m', 'f'], title='Confusion matrix', cmap=plt.cm.Blues)
 
 #plot_confusion_matrix(X = test_generator.classes, y_true = y_pred,labels= category_names, normalize=False)
