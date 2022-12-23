@@ -18,8 +18,7 @@ np.random.seed(seed)
 
 # load data
 dataset = data.getData() #instance 
-X, Y, p = dataset.get()
-
+X, Y, p = dataset.get()   # X is a 2D numpy array of shape (6733,430) and shape of Y is (6733,)
 X = X.reshape(6733, 430)
 
 # baseline model
@@ -56,6 +55,7 @@ print("Larger: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 
 # save model to dir
 model.save_weights(os.path.join('saved_models', 'gen_kcv_.h5'))
+model.save(os.path.join('saved_models', 'gender_model.h5'))
 
 # load predictions from file
 pred = pd.read_csv(os.path.join('saved_models', 'predicted.csv'))

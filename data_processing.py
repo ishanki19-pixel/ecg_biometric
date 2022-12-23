@@ -376,6 +376,9 @@ class getData():
   def split_dataset(self, feat, labels):
     inst = Setup()
     self.X_train, self.X_test, self.y_train, self.y_test = inst.random_split(np.asarray(feat, dtype=np.float), np.asarray(labels, dtype=np.int32))
+  
+  def len(self):
+    return len(self.X_train)
 
 class plotHelper():
   # prints and plots the confusion matrix

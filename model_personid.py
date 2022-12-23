@@ -87,4 +87,5 @@ target_names = np.asarray(names)
 # plot_fn.plot_confusion_matrix(cm, classes=['m', 'f'], title='Confusion matrix')
 
 # load model from dir
+model.save(os.path.join('saved_models', 'person_model.h5'))
 model = model.load_weights(os.path.join('saved_models', 'rsampled_.h5'))
